@@ -1,0 +1,258 @@
+{
+	"pages": [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "Valorant助手",
+				"navigationBarBackgroundColor": "#0F1419",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#0F1419",
+				"backgroundTextStyle": "dark",
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50,
+				"backgroundColorTop": "#0F1419",
+				"backgroundColorBottom": "#0F1419",
+				"usingComponents": {},
+				"style": "v2",
+				"singlePage": {
+					"navigationBarFit": "float"
+				}
+			}
+		},
+		{
+			"path": "pages/hero/detail/detail",
+			"style": {
+				"navigationBarTitleText": "英雄详情",
+				"navigationBarBackgroundColor": "#0F1419",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#0F1419",
+				"backgroundTextStyle": "dark",
+				"enablePullDownRefresh": false,
+				"onReachBottomDistance": 50,
+				"backgroundColorTop": "#0F1419",
+				"backgroundColorBottom": "#1E2328",
+				"usingComponents": {},
+				"style": "v2",
+				"disableScroll": false
+			}
+		},
+		{
+			"path": "pages/map/detail/detail",
+			"style": {
+				"navigationBarTitleText": "地图详情",
+				"navigationBarBackgroundColor": "#0F1419",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#0F1419",
+				"backgroundTextStyle": "dark",
+				"enablePullDownRefresh": false,
+				"onReachBottomDistance": 50,
+				"backgroundColorTop": "#0F1419",
+				"backgroundColorBottom": "#1E2328",
+				"usingComponents": {},
+				"style": "v2",
+				"disableScroll": false
+			}
+		},
+		{
+			"path": "pages/hero/list/list",
+			"style": {
+				"navigationBarTitleText": "英雄列表",
+				"navigationBarBackgroundColor": "#0F1419",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#0F1419",
+				"backgroundTextStyle": "dark",
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50,
+				"backgroundColorTop": "#0F1419",
+				"backgroundColorBottom": "#1E2328",
+				"usingComponents": {},
+				"style": "v2"
+			}
+		},
+		{
+			"path": "pages/map/list/list",
+			"style": {
+				"navigationBarTitleText": "地图列表",
+				"navigationBarBackgroundColor": "#0F1419",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#0F1419",
+				"backgroundTextStyle": "dark",
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50,
+				"backgroundColorTop": "#0F1419",
+				"backgroundColorBottom": "#1E2328",
+				"usingComponents": {},
+				"style": "v2"
+			}
+		},
+		{
+			"path": "pages/weapon/detail/detail",
+			"style": {
+				"navigationBarTitleText": "武器详情",
+				"navigationBarBackgroundColor": "#0F1419",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#0F1419",
+				"backgroundTextStyle": "dark",
+				"enablePullDownRefresh": false,
+				"onReachBottomDistance": 50,
+				"backgroundColorTop": "#0F1419",
+				"backgroundColorBottom": "#1E2328",
+				"usingComponents": {},
+				"style": "v2",
+				"disableScroll": false
+			}
+		},
+		{
+			"path": "pages/weapon/list/list",
+			"style": {
+				"navigationBarTitleText": "武器列表",
+				"navigationBarBackgroundColor": "#0F1419",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#0F1419",
+				"backgroundTextStyle": "dark",
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50,
+				"backgroundColorTop": "#0F1419",
+				"backgroundColorBottom": "#1E2328",
+				"usingComponents": {},
+				"style": "v2",
+				"disableScroll": false
+			}
+		},
+		{
+			"path": "pages/search/search",
+			"style": {
+				"navigationBarTitleText": "搜索",
+				"navigationBarBackgroundColor": "#0F1419",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#0F1419",
+				"backgroundTextStyle": "dark",
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50,
+				"backgroundColorTop": "#0F1419",
+				"backgroundColorBottom": "#1E2328",
+				"usingComponents": {},
+				"style": "v2",
+				"disableScroll": false
+			}
+		},
+		{
+			"path": "pages/content/detail/detail",
+			"style": {
+				"navigationBarTitleText": "视频详情",
+				"navigationBarBackgroundColor": "#0F1419",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#0F1419",
+				"backgroundTextStyle": "dark",
+				"enablePullDownRefresh": false,
+				"onReachBottomDistance": 50,
+				"backgroundColorTop": "#0F1419",
+				"backgroundColorBottom": "#1E2328",
+				"usingComponents": {},
+				"style": "v2",
+				"disableScroll": false
+			}
+		},
+		{
+			"path": "pages/profile/profile",
+			"style": {
+				"navigationBarTitleText": "个人中心",
+				"navigationBarBackgroundColor": "#0F1419",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#0F1419",
+				"backgroundTextStyle": "dark",
+				"enablePullDownRefresh": false,
+				"usingComponents": {},
+				"style": "v2"
+			}
+		},
+		{
+			"path": "pages/auth/login/login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"navigationBarBackgroundColor": "#0F1419",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#0F1419",
+				"backgroundTextStyle": "dark",
+				"enablePullDownRefresh": false,
+				"usingComponents": {},
+				"style": "v2"
+			}
+		},
+		{
+			"path": "pages/favorite/list/list",
+			"style": {
+				"navigationBarTitleText": "收藏列表",
+				"navigationBarBackgroundColor": "#0F1419",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#0F1419",
+				"backgroundTextStyle": "dark",
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50,
+				"usingComponents": {},
+				"style": "v2"
+			}
+		}
+	],
+	"tabBar": {
+		"color": "#ECECEC",
+		"selectedColor": "#FF4654",
+		"backgroundColor": "#1E2328",
+		"borderStyle": "white",
+		"position": "bottom",
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"text": "首页",
+				"iconPath": "static/assets/icons/home.png",
+				"selectedIconPath": "static/assets/icons/home-active.png"
+			},
+			{
+				"pagePath": "pages/search/search",
+				"text": "查询",
+				"iconPath": "static/assets/icons/search.png",
+				"selectedIconPath": "static/assets/icons/search-active.png"
+			},
+			{
+				"pagePath": "pages/profile/profile",
+				"text": "我的",
+				"iconPath": "static/assets/icons/profile.png",
+				"selectedIconPath": "static/assets/icons/profile-active.png"
+			}
+		]
+	},
+	"networkTimeout": {
+		"request": 10000,
+		"downloadFile": 30000
+	},
+	"debug": true,
+	"navigateToMiniProgramAppIdList": [],
+	"permission": {
+		"scope.userLocation": {
+			"desc": "您的位置信息将用于提供更精准的游戏服务"
+		}
+	},
+	"requiredPrivateInfos": [],
+	"lazyCodeLoading": "requiredComponents",
+	"sitemapLocation": "sitemap.json",
+	"style": "v2",
+	"componentFramework": "glass-easel",
+	"renderer": "webview",
+	"rendererOptions": {
+		"skyline": {
+			"defaultDisplayBlock": true,
+			"disableABTest": true
+		}
+	},
+	"darkmode": false,
+	"globalStyle": {
+		"backgroundTextStyle": "dark",
+		"navigationBarBackgroundColor": "#0F1419",
+		"navigationBarTitleText": "Valorant助手",
+		"navigationBarTextStyle": "white",
+		"backgroundColor": "#0F1419",
+		"enablePullDownRefresh": true,
+		"onReachBottomDistance": 50
+	},
+	"subPackages": []
+}
