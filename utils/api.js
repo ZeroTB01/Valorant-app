@@ -476,6 +476,18 @@ const contentAPI = {
         return apiRequest(`/content/type/${contentType}`, 'GET');
     },
     /**
+     * 按关系获取内容（地图、英雄、位置等）
+     * @param {object} params - 查询参数
+     * @param {number} params.heroId - 英雄ID
+     * @param {number} params.mapId - 地图ID
+     * @param {number} params.weaponId - 武器ID
+     * @param {number} params.positionId - 点位ID
+     * @returns {Promise<object>} 内容列表
+     */
+    getContentsByRelation: (params = {}) => {
+        return apiRequest('/content/relation', 'GET', params);
+    },
+    /**
      * 获取热门内容
      * @param {object} params - 查询参数
      * @param {number} params.limit - 返回数量

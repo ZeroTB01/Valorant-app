@@ -2,7 +2,7 @@
     <!-- pages/search/search.wxml -->
     <view class="create-page">
         <!-- 顶部导航栏 -->
-        <view class="page-header">
+        <!-- <view class="page-header">
             <view class="header-left">
                 <text class="back-btn" @tap="goBack">
                     {{ currentStep === 'map' ? '✕' : '←' }}
@@ -16,25 +16,39 @@
             <view class="header-right">
                 <text class="reset-btn" @tap="resetFilter" v-if="selectedMap">重置</text>
             </view>
-        </view>
+        </view> -->
 
         <!-- 进度指示器 -->
         <view class="progress-indicator">
-            <view :class="'step-item ' + (currentStep === 'map' ? 'active' : selectedMap ? 'completed' : '')">
+            <!-- 第一步：选择地图 -->
+            <view 
+                :class="'step-item ' + (currentStep === 'map' ? 'active' : selectedMap ? 'completed' : '')"
+                @tap="goToStep('map')"
+            >
                 <view class="step-circle">1</view>
                 <text class="step-text">选择地图</text>
             </view>
 
             <view :class="'step-line ' + (selectedMap ? 'active' : '')"></view>
 
-            <view :class="'step-item ' + (currentStep === 'hero' ? 'active' : selectedHero ? 'completed' : '')">
+            <!-- 第二步：选择英雄 -->
+            <view 
+                :class="'step-item ' + (currentStep === 'hero' ? 'active' : selectedHero ? 'completed' : '')"
+                @tap="goToStep('hero')"
+                :style="selectedMap ? '' : 'opacity: 0.5; cursor: not-allowed;'"
+            >
                 <view class="step-circle">2</view>
                 <text class="step-text">选择英雄</text>
             </view>
 
             <view :class="'step-line ' + (selectedHero ? 'active' : '')"></view>
 
-            <view :class="'step-item ' + (currentStep === 'position' ? 'active' : '')">
+            <!-- 第三步：查看点位 -->
+            <view 
+                :class="'step-item ' + (currentStep === 'position' ? 'active' : '')"
+                @tap="goToStep('position')"
+                :style="selectedHero ? '' : 'opacity: 0.5; cursor: not-allowed;'"
+            >
                 <view class="step-circle">3</view>
                 <text class="step-text">查看点位</text>
             </view>
@@ -112,18 +126,45 @@
                     <text class="count-badge" v-if="heroList.length > 0">{{ heroList.length }}</text>
                 </view>
 
-                <!-- 英雄网格 -->
-                <view class="hero-grid">
-                    <view class="hero-item" @tap="selectHero" :data-index="index" v-for="(item, index) in heroList" :key="index">
-                        <view class="hero-image-wrapper">
-                            <image class="hero-image" :src="item.avatar" mode="aspectFit" lazy-load />
-                            <view :class="'hero-type-tag ' + item.typeClass">
-                                {{ item.typeLabel }}
-                            </view>
-                        </view>
-
-                        <text class="hero-name">{{ item.heroName }}</text>
+                <!-- 定位筛选标签 -->
+                <view class="hero-type-filter" v-if="!loading.hero">
+                    <view 
+                        :class="'filter-tag ' + (currentHeroTypeFilter === 'all' ? 'active' : '')"
+                        @tap="filterHeroByType"
+                        :data-type="'all'"
+                    >
+                        全部
                     </view>
+                    <view 
+                        v-for="heroType in heroTypes"
+                        :key="heroType.key"
+                        :class="'filter-tag ' + heroType.key + ' ' + (currentHeroTypeFilter === heroType.key ? 'active' : '')"
+                        @tap="filterHeroByType"
+                        :data-type="heroType.key"
+                    >
+                        {{ heroType.name }}
+                    </view>
+                </view>
+
+                <!-- 英雄网格 -->
+                <view class="hero-grid-by-type" v-if="!loading.hero && filteredHeroListByType.length > 0">
+                    <view 
+                        class="hero-item-compact" 
+                        @tap="selectHero" 
+                        :data-index="getHeroIndexByTypeAndId('', item.id)" 
+                        v-for="item in filteredHeroListByType" 
+                        :key="item.id"
+                    >
+                        <view class="hero-image-wrapper-compact">
+                            <image class="hero-image-compact" :src="item.avatar" mode="aspectFit" lazy-load />
+                        </view>
+                        <text class="hero-name-compact">{{ item.heroName }}</text>
+                    </view>
+                </view>
+
+                <!-- 空状态 -->
+                <view class="empty-state" v-if="!loading.hero && filteredHeroListByType.length === 0">
+                    <text class="empty-text">暂无该定位的英雄</text>
                 </view>
 
                 <!-- 加载中 -->
@@ -269,7 +310,17 @@ export default {
             mapList: [],
 
             heroList: [],
+            filteredHeroListByType: [],
+            currentHeroTypeFilter: 'all',
             positionList: [],
+
+            // 英雄定位类型
+            heroTypes: [
+                { key: 'duelist', name: '决斗者' },
+                { key: 'sentinel', name: '哨卫' },
+                { key: 'controller', name: '控场者' },
+                { key: 'initiator', name: '先锋' }
+            ],
 
             // 加载状态
             loading: {
@@ -426,6 +477,8 @@ export default {
                     }));
                     this.setData({
                         heroList: processedHeroes,
+                        currentHeroTypeFilter: 'all',
+                        filteredHeroListByType: processedHeroes,
                         currentStep: 'hero'
                     });
                     console.log('✅ 英雄列表加载成功:', processedHeroes.length + '个英雄');
@@ -563,6 +616,27 @@ export default {
             this.loadPositionList();
         },
 
+        // 定位筛选
+        filterHeroByType(e) {
+            const typeKey = e.currentTarget.dataset.type;
+            console.log('🎯 筛选英雄定位:', typeKey);
+            
+            let filteredList = this.heroList;
+            if (typeKey !== 'all') {
+                filteredList = this.heroList.filter(hero => hero.heroType === typeKey);
+            }
+            
+            this.setData({
+                currentHeroTypeFilter: typeKey,
+                filteredHeroListByType: filteredList
+            });
+
+            // 触发振动反馈
+            uni.vibrateShort({
+                type: 'light'
+            });
+        },
+
         // 选择攻防方
         selectSide(e) {
             const side = e.currentTarget.dataset.side;
@@ -581,6 +655,71 @@ export default {
 
             // 重新加载点位列表
             this.loadPositionList();
+        },
+
+        // 跳转到指定步骤
+        goToStep(stepName) {
+            console.log('📍 跳转到步骤:', stepName);
+
+            // 触发振动反馈
+            uni.vibrateShort({
+                type: 'light'
+            });
+
+            switch (stepName) {
+                case 'map':
+                    // 点击第一步，重置所有选择
+                    this.setData({
+                        currentStep: 'map',
+                        selectedMap: null,
+                        selectedHero: null,
+                        selectedSide: null,
+                        heroList: [],
+                        positionList: [],
+                        currentHeroTypeFilter: 'all',
+                        filteredHeroListByType: []
+                    });
+                    break;
+
+                case 'hero':
+                    // 点击第二步，只有已选地图才能跳转
+                    if (!this.selectedMap) {
+                        uni.showToast({
+                            title: '请先选择地图',
+                            icon: 'none'
+                        });
+                        return;
+                    }
+                    // 重置英雄和点位选择
+                    this.setData({
+                        currentStep: 'hero',
+                        selectedHero: null,
+                        selectedSide: null,
+                        positionList: [],
+                        currentHeroTypeFilter: 'all',
+                        filteredHeroListByType: this.heroList
+                    });
+                    break;
+
+                case 'position':
+                    // 点击第三步，只有已选英雄才能跳转
+                    if (!this.selectedHero) {
+                        uni.showToast({
+                            title: '请先选择英雄',
+                            icon: 'none'
+                        });
+                        return;
+                    }
+                    // 重置点位选择
+                    this.setData({
+                        currentStep: 'position',
+                        selectedSide: null,
+                        positionList: []
+                    });
+                    // 重新加载点位列表
+                    this.loadPositionList();
+                    break;
+            }
         },
 
         // ========== 导航操作方法 ==========
@@ -641,21 +780,32 @@ export default {
 
         // ========== 页面跳转方法 ==========
 
-        // 跳转到点位详情
+        // 跳转到内容列表
         goToPositionDetail(e) {
             const positionIndex = e.currentTarget.dataset.index;
             const position = this.positionList[positionIndex];
             if (!position) {
                 return;
             }
-            console.log('📍 查看点位详情:', position.positionName);
+            console.log('📍 跳转到内容列表:', position.positionName);
 
-            // 添加到最近查看
-            this.addToRecentViews(position);
+            // 跳转到内容列表页，传递筛选条件
+            const params = {
+                mapId: this.selectedMap.id,
+                mapName: this.selectedMap.name,
+                heroId: this.selectedHero.id,
+                heroName: this.selectedHero.name,
+                positionId: position.id,
+                positionName: position.positionName
+            };
+            
+            // 构建查询字符串
+            const queryString = Object.entries(params)
+                .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+                .join('&');
 
-            // 跳转到点位详情页
             uni.navigateTo({
-                url: `/pages/position/detail/detail?id=${position.id}`
+                url: `/pages/content/list/list?${queryString}`
             });
         },
 
@@ -762,6 +912,21 @@ export default {
                 });
             }
             return stars;
+        },
+
+        // 按定位获取英雄列表
+        getHeroesByType(typeKey) {
+            return this.heroList.filter(hero => hero.heroType === typeKey);
+        },
+
+        // 获取定位下的英雄数量
+        getHeroCountByType(typeKey) {
+            return this.getHeroesByType(typeKey).length;
+        },
+
+        // 获取英雄在原列表中的索引（用于选择时定位）
+        getHeroIndexByTypeAndId(typeKey, heroId) {
+            return this.heroList.findIndex(hero => hero.id === heroId);
         }
     }
 };
@@ -846,6 +1011,18 @@ export default {
     flex-direction: column;
     align-items: center;
     gap: 12rpx;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 12rpx;
+    border-radius: 12rpx;
+}
+
+.step-item:active {
+    transform: scale(0.95);
+}
+
+.step-item:not([style*="opacity: 0.5"]):hover {
+    transform: scale(1.05);
 }
 
 .step-circle {
@@ -1102,6 +1279,117 @@ export default {
 
 .hero-item:active {
     transform: scale(0.95);
+}
+
+/* 定位筛选标签 */
+.hero-type-filter {
+    display: flex;
+    gap: 12rpx;
+    margin-bottom: 24rpx;
+    flex-wrap: wrap;
+}
+
+.filter-tag {
+    padding: 8rpx 16rpx;
+    border-radius: 8rpx;
+    background: rgba(255, 255, 255, 0.08);
+    color: #999;
+    font-size: 22rpx;
+    border: 2rpx solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-tag.active {
+    color: white;
+    border-color: #ff4654;
+    background: rgba(255, 70, 84, 0.2);
+}
+
+.filter-tag.duelist.active {
+    border-color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.2);
+}
+
+.filter-tag.sentinel.active {
+    border-color: #4ecdc4;
+    background: rgba(78, 205, 196, 0.2);
+}
+
+.filter-tag.controller.active {
+    border-color: #45b7d1;
+    background: rgba(69, 183, 209, 0.2);
+}
+
+.filter-tag.initiator.active {
+    border-color: #ffa07a;
+    background: rgba(255, 160, 122, 0.2);
+}
+
+/* 英雄网格 */
+.hero-grid-by-type {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12rpx;
+    margin-bottom: 24rpx;
+}
+
+.hero-item-compact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8rpx;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.hero-item-compact:active {
+    transform: scale(0.95);
+}
+
+.hero-image-wrapper-compact {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 12rpx;
+    overflow: hidden;
+    background: #2a2d31;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-image-compact {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.hero-name-compact {
+    font-size: 20rpx;
+    color: #ececec;
+    text-align: center;
+    font-weight: 500;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 空状态 */
+.empty-state {
+    text-align: center;
+    padding: 80rpx 40rpx;
+    color: #666;
+    font-size: 24rpx;
+}
+
+.empty-text {
+    display: block;
+    font-size: 28rpx;
+    color: #999;
 }
 
 .hero-image-wrapper {

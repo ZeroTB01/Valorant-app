@@ -18,47 +18,52 @@
         <view class="main-content" v-if="!loading && !error && heroInfo">
             <!-- 英雄基本信息区域 -->
             <view class="hero-info-section">
-                <!-- 左侧：英雄大图 -->
-                <view class="hero-avatar-container">
-                    <image class="hero-avatar" :src="heroInfo.avatar" mode="aspectFit" lazy-load />
-                    <view class="avatar-overlay">
-                        <view :class="'hero-type-badge ' + heroInfo.typeClass">
-                            {{ heroInfo.typeLabel }}
+                <!-- 背景容器 -->
+                <view class="hero-bg-container">
+                    <!-- 渐变背景 -->
+                    <view class="hero-bg-gradient"></view>
+
+                    <!-- 英雄大图（居右） -->
+                    <view class="hero-avatar-wrapper">
+                        <image class="hero-avatar" :src="heroInfo.avatar" mode="aspectFit" lazy-load />
+                    </view>
+
+                    <!-- 信息覆盖层（左下角） -->
+                    <view class="hero-info-overlay">
+                        <!-- 英雄名称 -->
+                        <view class="hero-header-overlay">
+                            <text class="hero-name-large">{{ heroInfo.heroName }}</text>
+                            <text class="hero-key-overlay">{{ heroInfo.heroKey }}</text>
                         </view>
-                    </view>
-                </view>
 
-                <!-- 右侧：英雄信息 -->
-                <view class="hero-details">
-                    <view class="hero-header">
-                        <text class="hero-name">{{ heroInfo.heroName }}</text>
-                        <text class="hero-key">{{ heroInfo.heroKey }}</text>
-                    </view>
+                        <!-- 描述 -->
+                        <text class="hero-description-overlay">{{ heroInfo.description }}</text>
 
-                    <view class="hero-description">
-                        <text>{{ heroInfo.description }}</text>
-                    </view>
-
-                    <view class="hero-stats">
-                        <view class="stat-item">
-                            <text class="stat-label">难度等级</text>
+                        <!-- 难度星级 -->
+                        <view class="difficulty-section">
+                            <text class="difficulty-label">难度等级</text>
                             <view class="difficulty-stars">
                                 <text :class="'star ' + (item.filled ? 'filled' : '')" v-for="(item, index) in heroInfo.difficultyStars" :key="index">★</text>
                             </view>
                         </view>
                     </view>
 
-                    <!-- 操作按钮 -->
-                    <view class="action-buttons">
-                        <button class="action-btn primary" @tap="addToFavorites">
-                            <text class="btn-icon">❤️</text>
-                            <text>收藏</text>
-                        </button>
-                        <button class="action-btn secondary" open-type="share">
-                            <text class="btn-icon">📤</text>
-                            <text>分享</text>
-                        </button>
+                    <!-- 定位标签 -->
+                    <view :class="'hero-type-badge-overlay ' + heroInfo.typeClass">
+                        {{ heroInfo.typeLabel }}
                     </view>
+                </view>
+
+                <!-- 操作按钮区 -->
+                <view class="action-buttons-container">
+                    <button class="action-btn primary" @tap="addToFavorites">
+                        <text class="btn-icon">❤️</text>
+                        <text>收藏</text>
+                    </button>
+                    <button class="action-btn secondary" open-type="share">
+                        <text class="btn-icon">📤</text>
+                        <text>分享</text>
+                    </button>
                 </view>
             </view>
 
@@ -422,10 +427,16 @@ export default {
         // 工具方法：获取技能图标样式
         getSkillIcon(skillKey) {
             const iconMap = {
+                // 支持下划线格式
                 c_skill: 'skill-c',
                 q_skill: 'skill-q',
                 e_skill: 'skill-e',
-                x_ultimate: 'skill-x'
+                x_ultimate: 'skill-x',
+                // 支持单字母格式（数据库实际格式）
+                'C': 'skill-c',
+                'Q': 'skill-q',
+                'E': 'skill-e',
+                'X': 'skill-x'
             };
             return iconMap[skillKey] || 'skill-default';
         },
@@ -433,10 +444,16 @@ export default {
         // 工具方法：获取技能快捷键
         getSkillHotkey(skillKey) {
             const hotkeyMap = {
+                // 支持下划线格式（前端定义）
                 c_skill: 'C',
                 q_skill: 'Q',
                 e_skill: 'E',
-                x_ultimate: 'X'
+                x_ultimate: 'X',
+                // 支持单字母格式（数据库中的实际格式）
+                'C': 'C',
+                'Q': 'Q',
+                'E': 'E',
+                'X': 'X'
             };
             return hotkeyMap[skillKey] || '?';
         }
@@ -531,106 +548,125 @@ export default {
 
 /* 英雄信息区域 */
 .hero-info-section {
-    display: flex;
-    gap: 32rpx;
     margin-bottom: 48rpx;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 24rpx;
-    padding: 32rpx;
-    backdrop-filter: blur(10px);
-}
-
-.hero-avatar-container {
-    flex: 0 0 280rpx;
-    position: relative;
-}
-
-.hero-avatar {
-    width: 100%;
-    height: 360rpx;
-    border-radius: 16rpx;
-    background: linear-gradient(45deg, #2a2d31, #3c4043);
-}
-
-.avatar-overlay {
-    position: absolute;
-    bottom: 16rpx;
-    left: 16rpx;
-    right: 16rpx;
-}
-
-.hero-type-badge {
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 8rpx 16rpx;
-    border-radius: 20rpx;
-    font-size: 22rpx;
-    text-align: center;
-    backdrop-filter: blur(8px);
-}
-
-.hero-type-duelist {
-    border: 2rpx solid #ff6b6b;
-}
-.hero-type-sentinel {
-    border: 2rpx solid #4ecdc4;
-}
-.hero-type-controller {
-    border: 2rpx solid #45b7d1;
-}
-.hero-type-initiator {
-    border: 2rpx solid #ffa07a;
-}
-
-.hero-details {
-    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 24rpx;
 }
 
-.hero-header {
-    display: flex;
-    flex-direction: column;
-    gap: 8rpx;
+.hero-bg-container {
+    position: relative;
+    height: 540rpx;
+    border-radius: 24rpx;
+    overflow: hidden;
+    background: #0f1419;
 }
 
-.hero-name {
-    font-size: 48rpx;
-    font-weight: bold;
-    color: #ff4654;
-    line-height: 1.2;
+/* 渐变背景 */
+.hero-bg-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 70, 84, 0.15) 0%,
+        rgba(255, 70, 84, 0.08) 25%,
+        rgba(30, 35, 40, 0.6) 100%
+    );
+    z-index: 1;
 }
 
-.hero-key {
-    font-size: 24rpx;
-    color: #999;
-    text-transform: uppercase;
-    letter-spacing: 2rpx;
-}
-
-.hero-description {
-    color: #cccccc;
-    font-size: 28rpx;
-    line-height: 1.6;
-}
-
-.hero-stats {
-    display: flex;
-    flex-direction: column;
-    gap: 16rpx;
-}
-
-.stat-item {
+/* 英雄大图容器 */
+.hero-avatar-wrapper {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 55%;
     display: flex;
     align-items: center;
-    gap: 16rpx;
+    justify-content: flex-end;
+    z-index: 2;
 }
 
-.stat-label {
+.hero-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding-right: 40rpx;
+}
+
+/* 信息覆盖层 */
+.hero-info-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 55%;
+    padding: 48rpx 32rpx;
+    background: linear-gradient(
+        to top,
+        rgba(15, 20, 25, 0.95),
+        rgba(30, 35, 40, 0.7),
+        transparent
+    );
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    gap: 16rpx;
+    z-index: 3;
+    min-height: 260rpx;
+    justify-content: flex-end;
+}
+
+/* 英雄名称 */
+.hero-header-overlay {
+    display: flex;
+    flex-direction: column;
+    gap: 6rpx;
+    margin-bottom: 8rpx;
+}
+
+.hero-name-large {
+    font-size: 56rpx;
+    font-weight: 900;
+    color: #ff4654;
+    line-height: 1;
+    letter-spacing: -2rpx;
+}
+
+.hero-key-overlay {
+    font-size: 20rpx;
+    color: #ff4654;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 4rpx;
+    font-weight: 600;
+}
+
+/* 描述文本 */
+.hero-description-overlay {
     font-size: 26rpx;
+    color: #cccccc;
+    line-height: 1.5;
+    margin-bottom: 4rpx;
+}
+
+/* 难度等级区域 */
+.difficulty-section {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    margin-top: 8rpx;
+    padding-top: 12rpx;
+    border-top: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.difficulty-label {
+    font-size: 20rpx;
     color: #999;
-    min-width: 120rpx;
+    min-width: 70rpx;
 }
 
 .difficulty-stars {
@@ -639,43 +675,103 @@ export default {
 }
 
 .star {
-    font-size: 28rpx;
+    font-size: 24rpx;
     color: #3c4043;
     transition: color 0.3s ease;
 }
 
 .star.filled {
     color: #ffd700;
+    text-shadow: 0 0 8rpx rgba(255, 215, 0, 0.5);
 }
 
-.action-buttons {
+/* 定位标签 */
+.hero-type-badge-overlay {
+    position: absolute;
+    top: 24rpx;
+    left: 24rpx;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10rpx 20rpx;
+    border-radius: 12rpx;
+    font-size: 20rpx;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    border: 2rpx solid rgba(255, 255, 255, 0.1);
+    z-index: 4;
+    transition: all 0.3s ease;
+}
+
+.hero-type-badge-overlay:active {
+    transform: scale(1.05);
+    border-color: #ff4654;
+}
+
+.hero-type-duelist {
+    border-color: #ff6b6b !important;
+    color: #ff6b6b !important;
+}
+
+.hero-type-sentinel {
+    border-color: #4ecdc4 !important;
+    color: #4ecdc4 !important;
+}
+
+.hero-type-controller {
+    border-color: #45b7d1 !important;
+    color: #45b7d1 !important;
+}
+
+.hero-type-initiator {
+    border-color: #ffa07a !important;
+    color: #ffa07a !important;
+}
+
+/* 操作按钮容器 */
+.action-buttons-container {
     display: flex;
     gap: 16rpx;
-    margin-top: 16rpx;
-    width: 150px;
+    justify-content: flex-start;
 }
 
 .action-btn {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8rpx;
-    padding: 16rpx 24rpx;
-    border-radius: 12rpx;
+    padding: 18rpx 32rpx;
+    border-radius: 14rpx;
     font-size: 26rpx;
     border: none;
-    flex: 1;
-    justify-content: center;
+    flex: 0 0 auto;
+    min-width: 160rpx;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
 }
 
 .action-btn.primary {
-    background: #ff4654;
+    background: linear-gradient(135deg, #ff4654 0%, #ff6b6b 100%);
     color: white;
+    box-shadow: 0 8rpx 24rpx rgba(255, 70, 84, 0.3);
+}
+
+.action-btn.primary:active {
+    transform: translateY(-2rpx) scale(0.98);
+    box-shadow: 0 12rpx 32rpx rgba(255, 70, 84, 0.4);
 }
 
 .action-btn.secondary {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
     color: #ececec;
     border: 2rpx solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.action-btn.secondary:active {
+    transform: translateY(-2rpx) scale(0.98);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #ff4654;
+    color: #ff4654;
 }
 
 .btn-icon {
@@ -735,19 +831,6 @@ export default {
     justify-content: center;
     background: linear-gradient(45deg, #2a2d31, #3c4043);
     position: relative;
-}
-
-.skill-c {
-    background: linear-gradient(45deg, #4a90e2, #357abd);
-}
-.skill-q {
-    background: linear-gradient(45deg, #7ed321, #5ba700);
-}
-.skill-e {
-    background: linear-gradient(45deg, #f5a623, #d68400);
-}
-.skill-x {
-    background: linear-gradient(45deg, #d0021b, #9f0000);
 }
 
 .skill-hotkey {
@@ -904,23 +987,36 @@ export default {
 
 /* 响应式适配 */
 @media (max-width: 768rpx) {
-    .hero-info-section {
-        flex-direction: column;
-        gap: 24rpx;
+    .hero-bg-container {
+        height: 480rpx;
     }
 
-    .hero-avatar-container {
-        flex: none;
-        align-self: center;
+    .hero-avatar-wrapper {
+        width: 50%;
+        padding-right: 20rpx;
     }
 
-    .hero-avatar {
-        width: 240rpx;
-        height: 300rpx;
+    .hero-info-overlay {
+        right: 50%;
+        padding: 40rpx 24rpx;
+        min-height: 220rpx;
     }
 
-    .action-buttons {
-        flex-direction: column;
+    .hero-name-large {
+        font-size: 48rpx;
+    }
+
+    .hero-description-overlay {
+        font-size: 24rpx;
+    }
+
+    .action-buttons-container {
+        justify-content: space-between;
+    }
+
+    .action-btn {
+        flex: 1;
+        min-width: auto;
     }
 
     .skills-selector {

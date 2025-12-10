@@ -17,9 +17,6 @@
                     <view class="hero-item" @tap="goToDetail" data-type="hero" :data-id="item.id" :data-data="item" v-for="(item, index) in filteredHeroList" :key="index">
                         <view class="hero-image-wrapper">
                             <image class="hero-image" :src="item.avatar" mode="widthFix" lazy-load />
-                            <view :class="'hero-type-tag ' + item.typeClass">
-                                {{ item.typeLabel }}
-                            </view>
                         </view>
 
                         <text class="hero-name">{{ item.heroName }}</text>
