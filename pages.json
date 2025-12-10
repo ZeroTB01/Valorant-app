@@ -180,6 +180,56 @@
 			}
 		},
 		{
+			"path": "pages/content/list/list",
+			"style": {
+				"navigationBarTitleText": "内容列表",
+				"navigationBarBackgroundColor": "#0F1419",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#0F1419",
+				"backgroundTextStyle": "dark",
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50,
+				"backgroundColorTop": "#0F1419",
+				"backgroundColorBottom": "#1E2328",
+				"usingComponents": {},
+				"style": "v2"
+			}
+		},
+		{
+			"path": "pages/content/video-detail/video-detail",
+			"style": {
+				"navigationBarTitleText": "视频教程",
+				"navigationBarBackgroundColor": "#0F1419",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#0F1419",
+				"backgroundTextStyle": "dark",
+				"enablePullDownRefresh": false,
+				"onReachBottomDistance": 50,
+				"backgroundColorTop": "#0F1419",
+				"backgroundColorBottom": "#1E2328",
+				"usingComponents": {},
+				"style": "v2",
+				"disableScroll": false
+			}
+		},
+		{
+			"path": "pages/content/article-detail/article-detail",
+			"style": {
+				"navigationBarTitleText": "文章教程",
+				"navigationBarBackgroundColor": "#0F1419",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#0F1419",
+				"backgroundTextStyle": "dark",
+				"enablePullDownRefresh": false,
+				"onReachBottomDistance": 50,
+				"backgroundColorTop": "#0F1419",
+				"backgroundColorBottom": "#1E2328",
+				"usingComponents": {},
+				"style": "v2",
+				"disableScroll": false
+			}
+		},
+		{
 			"path": "pages/favorite/list/list",
 			"style": {
 				"navigationBarTitleText": "收藏列表",
